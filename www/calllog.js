@@ -6,12 +6,12 @@ CallListPlugin.prototype.list = function(params, successCallback, failureCallbac
 };
 
 CallListPlugin.prototype.contact = function(params, successCallback, failureCallback) {
-	return Cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'contact',
+	return cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'contact',
 			[ params ]);
 };
 
 CallListPlugin.prototype.show = function(params, successCallback, failureCallback) {
-	return Cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'show',
+	return cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'show',
 			[ params ]);
 };
 
