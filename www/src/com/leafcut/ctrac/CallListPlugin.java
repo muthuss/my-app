@@ -21,7 +21,7 @@ import android.provider.ContactsContract;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-import com.phonegap.api.Plugin;
+import com.phonegap.api.CordovaPlugin;
 import com.phonegap.api.PluginResult;
 import com.phonegap.api.PluginResult.Status;
 
@@ -30,7 +30,7 @@ import com.phonegap.api.PluginResult.Status;
  * 
  * @author James Hornitzky
  */
-public class CallListPlugin extends Plugin {
+public class CallListPlugin extends CordovaPlugin {
 
 	/** List Action */
 	private static final String ACTION = "list";
