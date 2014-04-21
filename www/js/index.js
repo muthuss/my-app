@@ -48,7 +48,7 @@ var app = {
         //homeElement.setAttribute('style', 'display:block;');
         
         console.log('Received Event: ' + id);
-        window.plugins.calllog.all("all",successCallback, failureCallback);
+        window.plugins.CallLog.list('all', successCallBack, failCallBack);
     }
 };
     function successCallBack(e){
