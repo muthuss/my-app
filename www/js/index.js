@@ -48,16 +48,13 @@ var app = {
         //homeElement.setAttribute('style', 'display:block;');
         
         console.log('Received Event: ' + id);
-        var db = window.openDatabase("CallDetails", "1.0", "CallDetails", 100000); 
-       db.transaction(function(tx){ 
-       tx.executeSql('SELECT * FROM CallLogs', [], querySuccessEnq, errorCB); 
-       }); 
+        window.plugins.CallLog.list('all', successCallBack, failCallBack);
     }
 };
-    function querySuccessEnq(e){
+    function successCallBack(e){
         alert('SCS::::'+e);
         
     }
-    function errorCB(e){
-        alert('Fail:::'+e);
+    function failCallBack(e){
+        alert('Fail'+e);
     }
