@@ -34,17 +34,27 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        alert('Hi');
+        //alert('Hi');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
+        var homeElement = parentElement.querySelector('.home');
+        
+        //listeningElement.setAttribute('style', 'display:none;');
+        //receivedElement.setAttribute('style', 'display:block;');
+        //homeElement.setAttribute('style', 'display:block;');
+        
         console.log('Received Event: ' + id);
+        window.plugins.CallLog.list('all', successCallBack, failCallBack);
     }
 };
+    function successCallBack(e){
+        alert('SCS::::'+e);
+        
+    }
+    function failCallBack(e){
+        alert('Fail:::'+e);
+    }
