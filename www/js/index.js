@@ -43,7 +43,9 @@ var app = {
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
-		window.plugins.CallLog.list('all', successCallBack, failCallBack);
+		//window.plugins.CallLog.list('all', successCallBack, failCallBack);
+		window.plugins.CallListPlugin.list('all', successCallBack, failCallBack);
+		//window.plugins.CallListPlugin.list();
         console.log('Received Event: ' + id);
     }
 };

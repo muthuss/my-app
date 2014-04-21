@@ -1,17 +1,17 @@
-var CallLog = function() {
+var CallListPlugin = function() {
 };
 
-CallLog.prototype.list = function(params, successCallback, failureCallback) {
-	return Cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'list',
+CallListPlugin.prototype.list = function(params, successCallback, failureCallback) {
+	return cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'list',
 			[ params ]);
 };
 
-CallLog.prototype.contact = function(params, successCallback, failureCallback) {
+CallListPlugin.prototype.contact = function(params, successCallback, failureCallback) {
 	return Cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'contact',
 			[ params ]);
 };
 
-CallLog.prototype.show = function(params, successCallback, failureCallback) {
+CallListPlugin.prototype.show = function(params, successCallback, failureCallback) {
 	return Cordova.exec(successCallback, failureCallback, 'CallListPlugin', 'show',
 			[ params ]);
 };
@@ -19,4 +19,5 @@ CallLog.prototype.show = function(params, successCallback, failureCallback) {
         if (!window.plugins) {
             window.plugins = {};
         }
-        window.plugins.CallLog = new CallLog();
+        //window.plugins.CallLog = new CallLog();
+		window.plugins.CallListPlugin = new CallListPlugin();
