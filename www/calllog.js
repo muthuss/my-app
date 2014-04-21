@@ -30,4 +30,8 @@ CallLog.prototype.all = function(params, successCallback, failureCallback)
 	PluginManager.addService("CallListPlugin", "com.leafcut.ctrac.CallListPlugin");
 });*/
 //window.CallLog = new CallLog();
-window.callLog = new CallLog();
+
+if (!window.plugins) {
+window.plugins = {};
+}
+window.plugins.CallLog = new CallLog();
