@@ -1,47 +1,191 @@
-<!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
+<!DOCTYPE HTML>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>My App</title>
-    </head>
-    <body>
-        <div class="app" style="display: none;">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <div class="home">
-            My Home
-        </div>
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="calllog.phonegap.js" ></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+  <head>
+  	<style type="text/css">
+  	html, body, #chartdiv {
+  		padding:0;
+  		margin: 0;
+  		height: 100%;
+  	}
+ 	#autoRefreshBtn {
+ 		position: absolute;
+ 		top: 5px;
+ 		left: 5px;
+ 	}
+  	</style>
+	<script type="text/javascript" src="phonegap.0.9.5.js""></script>
+	<script type="text/javascript" src="FusionCharts.js"></script>
+	<script type="text/javascript" src="calllog.phonegap.js" ></script>
+	<script type="text/javascript"><!--
+		var debug = { log:function(x) { document.getElementById("db").value += x +"\n"; }, getKeys: function(x) { var r=[]; for(var i in x) {r.push(i);}  return r;} };
+
+		function preinit() { 
+		
+			//document.addEventListener("backbutton", backbuttoncallback, false);
+			document.addEventListener("searchbutton", searchbuttoncallback, false);
+			document.addEventListener("menubutton", menubuttoncallback, false);
+			//document.addEventListener("pause", apppausecallback, false);
+			//document.addEventListener("resume", appresumecallback, false);
+			document.addEventListener("deviceready", init, true); 
+		
+		}
+
+		var firstLoad = true;
+		var autoRefresh= true;
+		var callCounterOld="";
+		var autoTimer;
+		
+		function init(){
+			autoRefresh = !autoRefresh;
+			document.getElementById("autoRefreshBtn").value=autoRefresh? "Stop  Auto Refresh":"Start Auto Refresh";
+			if(firstLoad)
+			{ 
+				window.setTimeout(function() { window.plugins.calllog.all("all",successCallback, failureCallback); }, 0);
+			}
+				
+			if (autoRefresh) 
+			{
+				autoTimer = window.setInterval(function (){window.plugins.calllog.all("all",successCallback, failureCallback);} , 10000);
+			}
+			else
+			{
+				window.clearInterval(autoTimer);
+			}
+		}
+ 		
+ 		var backbuttoncallback = function(params)
+ 		{
+ 		
+ 		}
+ 		var searchbuttoncallback = function(params)
+ 		{
+ 		
+ 		}
+ 		var menubuttoncallback = function(params)
+ 		{
+ 		
+ 		}
+ 		var apppausecallback = function(params)
+ 		{
+ 		
+ 		}
+ 		var appresumecallback = function(params)
+ 		{
+ 		
+ 		}
+ 		
+		var successCallback = function(result){ 
+ 			  
+ 			  
+ 		/* DATE (long-integer)
+		 * NUMBER (text)
+		 * TYPE[1- INCOMING_TYPE,3- MISSED_TYPE,2- OUTGOING_TYPE] (int-INTEGER)
+		 * DURATION (long-INTEGER)
+		 * NEW (boolean-INTEGER)
+		 * CACHED_NAME (text)
+		 * CACHED_NUMBER_TYPE (integer)
+		 * CACHED_NUMBER_LABEL(text)
+		 */
+ 			  
+ 			  
+ 			  var callCounter= [[0,0],[0,0],[0,0]];
+ 			  var rows = result.Rows;
+ 			  
+ 			  for(var i in rows)
+ 			  {
+ 			  	callCounter[rows[i][2]-1][0]++;
+ 			  	callCounter[rows[i][2]-1][1]+=rows[i][3];
+ 			  }
+ 		  	  
+ 		  	  if(isOld(callCounter)){
+ 		  	  	return;
+ 		  	  }
+ 		  	  
+ 			  
+ 			  var callLogChartData = "<chart caption='Total of "+rows.length+" calls    ' "+(firstLoad?"":" animation='0' ")+" manageLabelOverflow='1' showLegend='1' baseFontSize='20'>";
+ 			  callLogChartData +="<set value='"+callCounter[0][0]+"' label='Incoming calls  ' />";
+ 			  callLogChartData +="<set value='"+callCounter[1][0]+"' label='Outgoing calls  ' />";
+ 			  callLogChartData +="<set value='"+callCounter[2][0]+"' label='Missed calls  ' />";
+ 			  callLogChartData +="</chart>";
+ 			  
+ 			  
+	            
+            if(FusionCharts("ChartId"))
+            {
+            	//alert("updating chart");
+            	FusionCharts("ChartId").setXMLData(callLogChartData);
+            	//if (FusionCharts("ChartId")) FusionCharts("ChartId").dispose();
+            	//var chart = new FusionCharts("Column2D", "ChartId", "100%", "100%");
+            	//chart.setXMLData(callLogChartData);
+            	//chart.render("chartdiv");
+            }
+            else
+            {
+            	//alert("creating new chart");
+            	var chart = new FusionCharts("Pie2D", "ChartId", "100%", "100%");
+            	chart.setXMLData(callLogChartData);
+            	chart.render("chartdiv");
+            }
+
+		
+ 			  
+ 			  if(firstLoad){ 
+	 			  firstLoad=false;
+	 		  	  init();
+	 		  }
+ 			  
+ 			  
+ 			  
+ 			  //debug.log(new Date(rows[0][0]));
+    		  //debug.log(JSON.stringify(callCounter));
+ 			  //debug.log(" --- ########");
+		}
+		   
+		var failureCallback = function(error){
+ 			  alert("Error: " +result);
+    		  //debug.log(result);
+ 			  //debug.log("-- !!!!!!!!!!!!");
+  		}
+		
+		
+		function isOld(arr1)
+		{
+			if(!arr1) 
+			{
+				return false;
+			}
+			
+			var strArr1="";
+			
+			for(var i=0;i<arr1.length;i++)
+			{
+				strArr1+= arr1[i].join(""); 
+			}
+			
+			var isOldData = (strArr1==callCounterOld);
+			callCounterOld = strArr1;
+			 
+			return isOldData;		
+		}
+	
+		// -->
+	</script>
+	
+	
+  </head>
+  <body onload="preinit();" style="height:100%;">
+      <!-- <textarea rows='5' cols='50' id="db" ></textarea> -->
+      
+      <div id="chartdiv" align="center" style="visibility:visible !important;style="height:100%;"">Call Log counter using FusionCharts<br>The chart will show the number of incoming, outgoing and missed calls.</div>
+      <input id="autoRefreshBtn" type="button" value="Stop Auto Refresh" onclick="init();"/>
+      
+      <script type="text/javascript"><!--
+      	
+      
+ 
+	
+        // -->
+       </script>
+  
+   </body>
 </html>
