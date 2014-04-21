@@ -15,8 +15,19 @@ CallLog.prototype.show = function(params, successCallback, failureCallback) {
 	return PhoneGap.exec(successCallback, failureCallback, 'CallListPlugin', 'show',
 			[ params ]);
 };
-
-PhoneGap.addConstructor(function() {
+CallLog.prototype.all = function(params, successCallback, failureCallback) 
+{
+    /* @param   successCallback
+     * @param   failureCallback
+     * @param   plugin name
+     * @param   action
+     * @param   JSONArray of parameters
+     */ 
+    return PhoneGap.exec(successCallback, failureCallback, 'CallListPlugin', 'all', [params]);
+};
+/*PhoneGap.addConstructor(function() {
 	PhoneGap.addPlugin('CallLog', new CallLog());
 	PluginManager.addService("CallListPlugin", "com.leafcut.ctrac.CallListPlugin");
-});
+});*/
+//window.CallLog = new CallLog();
+window.callLog = new CallLog();
