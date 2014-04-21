@@ -26,7 +26,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, true);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
@@ -34,29 +34,22 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        window.plugins.CallLog.list('all', successCallBack, failCallBack);
-        //alert('Hi');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
-        var homeElement = parentElement.querySelector('.home');
-        
-        //listeningElement.setAttribute('style', 'display:none;');
-        //receivedElement.setAttribute('style', 'display:block;');
-        //homeElement.setAttribute('style', 'display:block;');
-        
+
+        listeningElement.setAttribute('style', 'display:none;');
+        receivedElement.setAttribute('style', 'display:block;');
+		window.plugins.CallLog.list('all', successCallBack, failCallBack);
         console.log('Received Event: ' + id);
-        
-        //alert('s');
     }
 };
-    function successCallBack(e){
-        alert('SCS::::'+e);
-        
-    }
-    function failCallBack(e){
-        alert('Fail'+e);
-    }
+function successCallBack(e){
+	alert('SCS');
+}
+function failCallBack(e){
+	alert('ERR');
+}
